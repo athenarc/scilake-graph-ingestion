@@ -261,6 +261,16 @@ CALL apoc.periodic.iterate(
 );
 CALL apoc.periodic.iterate(
     'CALL apoc.load.json("file:///import/products/relationships.jsonl") YIELD value 
+     WHERE value.type = "PUBLISHED_IN"
+     RETURN value',
+    'MATCH (start:Manifestation {local_identifier: value.start})
+     MATCH (end:Venue {local_identifier: value.end})
+     MERGE (start)-[r:PUBLISHED_IN]->(end)
+     RETURN r',
+    {batchSize: 10000}
+);
+CALL apoc.periodic.iterate(
+    'CALL apoc.load.json("file:///import/products/relationships.jsonl") YIELD value 
      WHERE value.type = "IS_RELEVANT_TO"
      RETURN value',
     'MATCH (start:Product {local_identifier: value.start})

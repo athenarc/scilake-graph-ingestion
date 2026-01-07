@@ -108,6 +108,18 @@ CALL apoc.periodic.iterate(
     {batchSize: 1000}
 );
 
+# Load PUBLISHED_IN relationships
+CALL apoc.periodic.iterate(
+    'CALL apoc.load.json("file:///import/products/relationships.jsonl") YIELD value 
+     WHERE value.type = "PUBLISHED_IN"
+     RETURN value',
+    'MATCH (start:Manifestation {local_identifier: value.start})
+     MATCH (end:Venue {local_identifier: value.end})
+     MERGE (start)-[r:PUBLISHED_IN]->(end)
+     RETURN r',
+    {batchSize: 1000}
+);
+
 # Load RELATED_PRODUCT relationships
 CALL apoc.periodic.iterate(
   '
@@ -376,6 +388,16 @@ def process_files(base_dir):
                                     hosted_by_rel = clean_empty(hosted_by_rel)
                                     if hosted_by_rel:
                                         rel_file.write(json.dumps(hosted_by_rel) + "\n")
+                                # Create PUBLISHED_IN relationship if biblio.in (venue_id) exists
+                                if biblio.get("in"):
+                                    published_in_rel = {
+                                        "start": manif_id,
+                                        "end": biblio["in"],
+                                        "type": "PUBLISHED_IN"
+                                    }
+                                    published_in_rel = clean_empty(published_in_rel)
+                                    if published_in_rel:
+                                        rel_file.write(json.dumps(published_in_rel) + "\n")
 
                             # Store original manifestation as _data
                             # manif_data["_data"] = json.dumps(clean_empty(manif))
