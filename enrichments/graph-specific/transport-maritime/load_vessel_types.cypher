@@ -2,7 +2,7 @@
 //
 // Input JSONL (one JSON object per line), example:
 // {
-//   "remapped_id": "50|doi_dedup___::9187c90cf07c73c95c6709c6d061c233",
+//   "oaireid": "50|doi_dedup___::9187c90cf07c73c95c6709c6d061c233",
 //   "entities": {
 //     "entity": "vesselType",
 //     "linking": [
@@ -17,7 +17,7 @@
 //   "section_title": "Discussion and conclusions"
 // }
 //
-// remapped_id is the Product.local_identifier we link to.
+// oaireid is the Product.local_identifier we link to.
 // We merge existing VesselType nodes by name, then enrich with id and local_identifier.
 // We connect them with HAS_IN_TEXT_MENTION relationships carrying context.
 
@@ -39,8 +39,8 @@ CALL apoc.periodic.iterate(
   ",
   "
   WITH value
-  // --- Transform remapped_id to Product.local_identifier (same pattern as GEO script) ---
-  WITH value, split(value.remapped_id, \"|\") AS id_parts
+  // --- Transform oaireid to Product.local_identifier (same pattern as GEO script) ---
+  WITH value, split(value.oaireid, \"|\") AS id_parts
   WITH value, id_parts[1] AS id_part
   WITH value, \"https://explore.openaire.eu/search/result?id=\" + id_part AS product_local_id
 

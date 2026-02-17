@@ -19,7 +19,7 @@
 //   "section_title": ". . Energy sources and storage"
 // }
 //
-// remapped_id is the Product.local_identifier we link to.
+// oaireid is the Product.local_identifier we link to.
 // We create typed entity nodes (EnergyType, EnergyStorage)
 // and connect them with MENTIONS relationships carrying context.
 

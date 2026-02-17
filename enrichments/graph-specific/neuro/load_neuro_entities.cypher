@@ -2,7 +2,7 @@
 //
 // Input JSONL (one JSON object per line), example:
 // {
-//   "remapped_id": "50|doi_dedup___::a4cd9cfa0e190fd957df6f7ca28fe4ea",
+//   "oaireid": "50|doi_dedup___::a4cd9cfa0e190fd957df6f7ca28fe4ea",
 //   "entities": [
 //     {
 //       "entity": "technique",
@@ -19,7 +19,7 @@
 //   "section_title": ". . Comparison of sensorimotor structures"
 // }
 //
-// remapped_id is the Product.local_identifier we link to.
+// oaireid is the Product.local_identifier we link to.
 // We create typed entity nodes (Technique, Species, UBERONParcellation, BiologicalSex, PreparationType)
 // and connect them with MENTIONS relationships carrying context.
 
@@ -60,8 +60,8 @@ CALL apoc.periodic.iterate(
   ",
   "
   WITH value
-  // --- Transform remapped_id to Product.local_identifier (same pattern as GEO script) ---
-  WITH value, split(value.remapped_id, \"|\") AS id_parts
+  // --- Transform oaireid to Product.local_identifier (same pattern as GEO script) ---
+  WITH value, split(value.oaireid, \"|\") AS id_parts
   WITH value, id_parts[1] AS id_part
   WITH value, \"https://explore.openaire.eu/search/result?id=\" + id_part AS product_local_id
 

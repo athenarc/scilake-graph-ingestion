@@ -23,8 +23,8 @@ CALL apoc.periodic.iterate(
   CALL apoc.load.json("file:///import/geoareas.jsonl2") YIELD value
   UNWIND value.entities AS entity
 
-  // --- Transform remapped_id → Product.local_identifier ---
-  WITH value, entity, split(value.remapped_id, "|") AS id_parts
+  // --- Transform oaireid → Product.local_identifier ---
+  WITH value, entity, split(value.oaireid, "|") AS id_parts
   WITH value, entity, id_parts[1] AS id_part
   WITH
     "https://explore.openaire.eu/search/result?id=" + id_part AS product_local_id,

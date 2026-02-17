@@ -74,8 +74,8 @@ CALL apoc.periodic.iterate(
   "
   WITH value
 
-  // --- Transform remapped_id to Product.local_identifier ---
-  WITH value, split(value.remapped_id, \"|\") AS id_parts
+  // --- Transform oaireid to Product.local_identifier ---
+  WITH value, split(value.oaireid, \"|\") AS id_parts
   WITH value, id_parts[1] AS id_part
   WITH value, \"https://explore.openaire.eu/search/result?id=\" + id_part AS product_local_id
 
