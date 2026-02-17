@@ -2,7 +2,7 @@
 //
 // Input JSONL (one JSON object per line), example:
 // {
-//   "remapped_id": "50|doi_dedup___::a4cd9cfa0e190fd957df6f7ca28fe4ea",
+//   "oaireid": "50|doi_dedup___::a4cd9cfa0e190fd957df6f7ca28fe4ea",
 //   "entities": [
 //     {
 //       "entity": "energytype",
@@ -40,8 +40,8 @@ CALL apoc.periodic.iterate(
   ",
   "
   WITH value
-  // --- Transform remapped_id to Product.local_identifier (same pattern as GEO script) ---
-  WITH value, split(value.remapped_id, \"|\") AS id_parts
+  // --- Transform oaireid to Product.local_identifier (same pattern as GEO script) ---
+  WITH value, split(value.oaireid, \"|\") AS id_parts
   WITH value, id_parts[1] AS id_part
   WITH value, \"https://explore.openaire.eu/search/result?id=\" + id_part AS product_local_id
 
@@ -72,8 +72,6 @@ CALL apoc.periodic.iterate(
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
     model: ent.model,
-    section_label: value.section_label,
-    section_title: value.section_title
   }]->(node)
 
   RETURN count(*) AS processed
