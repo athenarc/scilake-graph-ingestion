@@ -48,11 +48,6 @@ IF NOT EXISTS
 FOR (n:PreparationType)
 ON (n.local_identifier);
 
-CREATE INDEX neuroentity_local_identifier_idx
-IF NOT EXISTS
-FOR (n:NeuroEntity)
-ON (n.local_identifier);
-
 CALL apoc.periodic.iterate(
   "
   CALL apoc.load.json('file:///import/neuro.jsonl') YIELD value
