@@ -68,7 +68,7 @@ ON (n.local_identifier);
 
 CALL apoc.periodic.iterate(
   "
-  CALL apoc.load.json('file:///import/ccam.json') YIELD value
+  CALL apoc.load.json('file:///import/ccam.jsonl') YIELD value
   RETURN value
   ",
   "
@@ -88,11 +88,11 @@ CALL apoc.periodic.iterate(
 
   WITH p, value, ent, link,
        CASE ent.entity
-         WHEN 'communicationtype'      THEN 'CommunicationType'
+         WHEN 'communicationType'      THEN 'CommunicationType'
          WHEN 'entityconnectiontype'  THEN 'EntityConnectionType'
          WHEN 'levelofautomation'     THEN 'LevelOfAutomation'
          WHEN 'scenariotype'          THEN 'ScenarioType'
-         WHEN 'sensortype'            THEN 'SensorType'
+         WHEN 'sensorType'            THEN 'SensorType'
          WHEN 'vehicletype'           THEN 'VehicleType'
          WHEN 'vrutype'               THEN 'VRUType'
          ELSE 'CCAMEntity'
@@ -110,9 +110,7 @@ CALL apoc.periodic.iterate(
   // --- Create contextual mention relationship ---
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
-    model: ent.model,
-    section_label: value.section_label,
-    section_title: value.section_title
+    model: ent.model
   }]->(node)
 
   RETURN count(*) AS processed
