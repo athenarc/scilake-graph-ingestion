@@ -7,5 +7,5 @@ CALL apoc.periodic.iterate(
   MERGE (a)-[m:MENTIONS]->(b)
   SET m.weight = weight
   ",
-  {batchSize: 5000}
+  {batchSize: 100000}
 );
