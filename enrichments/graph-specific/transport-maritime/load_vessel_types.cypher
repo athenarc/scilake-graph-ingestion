@@ -34,7 +34,7 @@ ON (n.name);
 
 CALL apoc.periodic.iterate(
   "
-  CALL apoc.load.json('file:///import/maritime.json') YIELD value
+  CALL apoc.load.json('file:///import/maritime.jsonl') YIELD value
   RETURN value
   ",
   "
@@ -53,6 +53,7 @@ CALL apoc.periodic.iterate(
 
   WITH p, value, ent, link,
        CASE ent.entity
+         WHEN 'vesseltype'     THEN 'VesselType'
          WHEN 'vesselType'     THEN 'VesselType'
          ELSE 'Error'
        END AS label
