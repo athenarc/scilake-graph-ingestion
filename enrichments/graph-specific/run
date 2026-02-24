@@ -1,0 +1,22 @@
+#!/bin/bash
+# Usage: ./run <container> [container ...] <cypher_file>
+# Example: ./run energy-neo4j neuro-neo4j load_legal_documents.cypher
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <container> [container ...] <cypher_file>"
+  echo "Example: $0 energy-neo4j neuro-neo4j load_legal_documents.cypher"
+  exit 1
+fi
+
+CYPHER_FILE="${@: -1}"
+containers=("${@:1:$#-1}")
+
+for container in "${containers[@]}"; do
+  echo "=== Running $CYPHER_FILE on $container ==="
+  LOG_FILE=./logs/${container}_load.log
+
+  cat "$CYPHER_FILE" | sudo docker exec -i "$container" cypher-shell \
+    -u neo4j -p 'H5NCfa3wBFWXJcnwRAtEi9nDkLCAab' > "$LOG_FILE" 2>&1
+
+  echo "--- Finished $container, log saved to $LOG_FILE ---"
+done
