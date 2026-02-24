@@ -55,7 +55,7 @@ ON (n.local_identifier);
 
 CALL apoc.periodic.iterate(
   "
-  CALL apoc.load.json('file:///import/neuroscience.json') YIELD value
+  CALL apoc.load.json('file:///import/neuro.jsonl') YIELD value
   RETURN value
   ",
   "
@@ -94,9 +94,7 @@ CALL apoc.periodic.iterate(
   // --- Create contextual mention relationship ---
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
-    model: ent.model,
-    section_label: value.section_label,
-    section_title: value.section_title
+    model: ent.model
   }]->(node)
 
   RETURN count(*) AS processed
