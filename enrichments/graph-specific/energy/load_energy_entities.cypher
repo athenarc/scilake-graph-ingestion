@@ -75,23 +75,20 @@ CALL apoc.periodic.iterate(
   // --- Create contextual mention relationship ---
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
-    model: ent.model,
+    model: ent.model
   }]->(node)
 
   RETURN count(*) AS processed
   ",
-  {batchSize: 100000}
+  {batchSize: 1000}
 );
 
-// --- Load energy entities linked to LegalDocument (rsNr = LegalDocument.local_identifier) ---
-// Input JSONL: each line has rsNr and entities (same shape as above).
-// Place file in import dir, e.g. file:///legal-energy-entities.jsonl
 CALL apoc.periodic.iterate(
-  '
-  CALL apoc.load.json("file:///import/legal-energy-entities.jsonl") YIELD value
+  "
+  CALL apoc.load.json(\"file:///import/energyType_fedlex.jsonl\") YIELD value
   RETURN value
-  ',
-  '
+  ",
+  "
   WITH value
   WHERE value.rsNr IS NOT NULL AND value.entities IS NOT NULL AND size(value.entities) > 0
   MATCH (d:LegalDocument {local_identifier: value.rsNr})
@@ -101,9 +98,9 @@ CALL apoc.periodic.iterate(
 
   WITH d, value, ent, link,
        CASE ent.entity
-         WHEN ''energytype''     THEN ''EnergyType''
-         WHEN ''energystorage''  THEN ''EnergyStorage''
-         ELSE ''EnergyEntity''
+         WHEN 'energytype'     THEN 'EnergyType'
+         WHEN 'energystorage'  THEN 'EnergyStorage'
+         ELSE 'EnergyEntity'
        END AS label
 
   CALL apoc.merge.node(
@@ -118,7 +115,6 @@ CALL apoc.periodic.iterate(
   }]->(node)
 
   RETURN count(*) AS processed
-  ',
+  ",
   {batchSize: 100000}
 );
-
