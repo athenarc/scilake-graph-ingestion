@@ -16,11 +16,14 @@
 // Step 1: Create index on GeographicEntity
 // Note: If index already exists, this command will fail - that's okay, just continue
 // Index on local_identifier is used for MERGE operations in the loading script
-CREATE INDEX geo_entity_id FOR (g:GeographicEntity) ON (g.local_identifier);
+CREATE INDEX geo_entity_id 
+IF NOT EXISTS
+FOR (g:GeographicEntity) 
+ON (g.local_identifier);
 
 CALL apoc.periodic.iterate(
   '
-  CALL apoc.load.json("file:///import/geoareas.jsonl2") YIELD value
+  CALL apoc.load.json("file:///import/geoareas.jsonl") YIELD value
   UNWIND value.entities AS entity
 
   // --- Transform oaireid → Product.local_identifier ---
@@ -61,8 +64,8 @@ CALL apoc.periodic.iterate(
   CREATE (p)-[r:HAS_IN_TEXT_MENTION]->(g)
   SET
     r.role = entity.role,
-    r.section_title = section_title,
-    r.section_label = section_label,
+    r.section_title = coalesce(section_title, "title_or_abstract"),
+    r.section_label = coalesce(section_label, "title_or_abstract"),
     r.start = entity.start,
     r.end = entity.end,
     r.text = entity.text
