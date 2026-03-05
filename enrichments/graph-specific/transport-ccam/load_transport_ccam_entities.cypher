@@ -88,11 +88,11 @@ CALL apoc.periodic.iterate(
 
   WITH p, value, ent, link,
        CASE ent.entity
-         WHEN 'communicationType'      THEN 'CommunicationType'
+         WHEN 'communicationtype'      THEN 'CommunicationType'
          WHEN 'entityconnectiontype'  THEN 'EntityConnectionType'
          WHEN 'levelofautomation'     THEN 'LevelOfAutomation'
          WHEN 'scenariotype'          THEN 'ScenarioType'
-         WHEN 'sensorType'            THEN 'SensorType'
+         WHEN 'sensortype'            THEN 'SensorType'
          WHEN 'vehicletype'           THEN 'VehicleType'
          WHEN 'vrutype'               THEN 'VRUType'
          ELSE 'CCAMEntity'
