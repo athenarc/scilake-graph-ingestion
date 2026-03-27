@@ -75,7 +75,9 @@ CALL apoc.periodic.iterate(
   // --- Create contextual mention relationship ---
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
-    model: ent.model
+    model: ent.model,
+    section_title: coalesce(value.section_title, "title_or_abstract"),
+    section_label: coalesce(value.section_label, "title_or_abstract")
   }]->(node)
 
   RETURN count(*) AS processed
@@ -111,7 +113,9 @@ CALL apoc.periodic.iterate(
 
   MERGE (d)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
-    model: ent.model
+    model: ent.model,
+    section_title: coalesce(value.section_title, "title_or_abstract"),
+    section_label: coalesce(value.section_label, "title_or_abstract")
   }]->(node)
 
   RETURN count(*) AS processed
