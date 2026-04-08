@@ -56,7 +56,7 @@ CALL apoc.periodic.iterate(
   "
   WITH value
   // --- Transform oaireid to Product.local_identifier (same pattern as GEO script) ---
-  WITH value, split(value.oaireid, \"|\") AS id_parts
+  WITH value, split(value.remapped_id, \"|\") AS id_parts
   WITH value, id_parts[1] AS id_part
   WITH value, \"https://explore.openaire.eu/search/result?id=\" + id_part AS product_local_id
 
@@ -90,8 +90,8 @@ CALL apoc.periodic.iterate(
   MERGE (p)-[r:HAS_IN_TEXT_MENTION {
     text: ent.text,
     model: ent.model,
-    section_label: coalesce(value.section_label, "title_or_abstract"),
-    section_title: coalesce(value.section_title, "title_or_abstract")
+    section_label: coalesce(value.section_label, 'title_or_abstract'),
+    section_title: coalesce(value.section_title, 'title_or_abstract')
   }]->(node)
 
   RETURN count(*) AS processed

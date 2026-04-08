@@ -64,8 +64,8 @@ CALL apoc.periodic.iterate(
   CREATE (p)-[r:HAS_IN_TEXT_MENTION]->(g)
   SET
     r.role = entity.role,
-    r.section_title = coalesce(section_title, "title_or_abstract"),
-    r.section_label = coalesce(section_label, "title_or_abstract"),
+    r.section_title = coalesce(section_title, 'title_or_abstract'),
+    r.section_label = coalesce(section_label, 'title_or_abstract'),
     r.start = entity.start,
     r.end = entity.end,
     r.text = entity.text
