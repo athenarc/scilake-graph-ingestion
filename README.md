@@ -55,3 +55,7 @@ To build a complete pilot graph, follow this order:
 
 See individual README files for specific instructions and requirements.
 
+## Acknowledgments
+
+This work was supported by the European Union's Horizon Europe research and innovation programme under grant agreement No. 101058573 [SciLake](https://scilake.eu/).
+
